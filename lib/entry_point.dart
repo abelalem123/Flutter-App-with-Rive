@@ -89,19 +89,21 @@ class _EntryPointState extends State<EntryPoint>
           AnimatedPositioned(
             curve: Curves.fastOutSlowIn,
             top: 16,
-            left: isSideMenuClosed ? 0 : 220,
-            duration: Duration(milliseconds: 200),
+            left: animation.value * 220,
+            duration: Duration(milliseconds: 1),
             child: MenuBtn(
               riveOnInit: (artboard) {
                 StateMachineController controller = RiveUtils.getRiveController(
                     artboard,
                     stateMachineName: "State Machine");
+                artboard.addController(controller);
                 isSidebarClosed = controller.findSMI('isOpen') as SMIBool;
                 isSidebarClosed.value = true;
               },
               press: () {
+                print("value" + isSidebarClosed.value.toString());
                 isSidebarClosed.value = !isSidebarClosed.value;
-                if (isSideMenuClosed) {
+                if (_animationController.value == 0) {
                   _animationController.forward();
                 } else {
                   _animationController.reverse();
